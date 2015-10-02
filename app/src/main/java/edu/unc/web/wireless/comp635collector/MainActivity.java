@@ -4,31 +4,25 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.TrafficStats;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoCdma;
-import android.telephony.CellInfoGsm;
 import android.telephony.CellInfoLte;
-import android.telephony.CellSignalStrength;
 import android.telephony.CellSignalStrengthCdma;
 import android.telephony.CellSignalStrengthLte;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.telephony.TelephonyManager;
 import java.util.List;
 
 import com.dropbox.client2.DropboxAPI;
@@ -56,16 +50,21 @@ public class MainActivity extends Activity {
 
         AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
         AndroidAuthSession session = new AndroidAuthSession(appKeys);
-        mDBApi = new DropboxAPI<AndroidAuthSession>(session);
+        mDBApi = new DropboxAPI<>(session);
         mDBApi.getSession().startOAuth2Authentication(getApplicationContext());
 
-        Button getDataBtn = (Button) findViewById(R.id.button);
-        getDataBtn.setOnClickListener(new View.OnClickListener() {
+        Button collectButton = (Button) findViewById(R.id.collectButton);
+        collectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String networkClass = getNetworkClass(getApplicationContext());
-                System.out.println("Connection type: " + networkClass);
-                //double uploadSpeed = getUploadSpeed();
+                ((TextView) findViewById(R.id.connectionTypeTextView)).setText(getNetworkClass(getApplicationContext()));
+                try {
+                    getUploadSpeed();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 try {
                     getDownloadSpeed();
                 } catch (ExecutionException e) {
@@ -85,7 +84,7 @@ public class MainActivity extends Activity {
                 // Required to complete auth, sets the access token on the session
                 mDBApi.getSession().finishAuthentication();
 
-                String accessToken = mDBApi.getSession().getOAuth2AccessToken();
+                mDBApi.getSession().getOAuth2AccessToken();
             } catch (IllegalStateException e) {
                 Log.i("DbAuthLog", "Error authenticating", e);
             }
