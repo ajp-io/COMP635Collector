@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Export"
-        android:id="@+id/readButton"
+        android:id="@+id/exportButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
 
@@ -85,7 +85,7 @@
         android:id="@+id/noteEditText"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/saveButton"
-        android:layout_alignEnd="@+id/readButton"
+        android:layout_alignEnd="@+id/exportButton"
         android:layout_below="@+id/downLabel" />
 
     <TextView
@@ -132,7 +132,8 @@
         android:text="Medium Text"
         android:id="@+id/timeTextView"
         android:layout_above="@+id/signalLabel"
-        android:layout_toStartOf="@+id/connectionTypeTextView" />
+        android:layout_alignEnd="@+id/exportButton"
+        android:layout_toEndOf="@+id/downLabel" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -141,6 +142,7 @@
         android:text="Medium Text"
         android:id="@+id/signalStrengthTextView"
         android:layout_above="@+id/connectionLabel"
+        android:layout_alignEnd="@+id/timeTextView"
         android:layout_toEndOf="@+id/connectionLabel" />
 
     <TextView

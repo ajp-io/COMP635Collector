@@ -20,9 +20,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import com.dropbox.client2.DropboxAPI;
@@ -44,9 +45,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         Button saveButton = (Button) findViewById(R.id.saveButton);
-        Button readButton = (Button) findViewById(R.id.readButton);
         saveButton.setOnClickListener(saveButtonHandler);
-        readButton.setOnClickListener(readButtonHandler);
+
+        Button exportButton = (Button) findViewById(R.id.exportButton);
+        exportButton.setOnClickListener(exportButtonHandler);
 
         AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
         AndroidAuthSession session = new AndroidAuthSession(appKeys);
@@ -57,23 +59,62 @@ public class MainActivity extends Activity {
         collectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((TextView) findViewById(R.id.connectionTypeTextView)).setText(getNetworkClass(getApplicationContext()));
-                try {
-                    getUploadSpeed();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    getDownloadSpeed();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
+                collectData();
             }
         });
+    }
+
+    private void collectData() {
+        ((TextView) findViewById(R.id.timeTextView)).setText(getTime());
+        ((TextView) findViewById(R.id.connectionTypeTextView)).setText(getNetworkClass(getApplicationContext()));
+        ((TextView) findViewById(R.id.signalStrengthTextView)).setText(getSignalStrength());
+
+        /*try {
+            getUploadSpeed();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            getDownloadSpeed();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+    }
+
+    private String getTime() {
+        SimpleDateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm:ss, z");
+        return df.format(Calendar.getInstance().getTime());
+    }
+
+    private String getSignalStrength() {
+        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(getApplicationContext().TELEPHONY_SERVICE);
+        List<CellInfo> cellInfoList = telephonyManager.getAllCellInfo();
+
+        for (int i = 0; i < cellInfoList.size(); i++) {
+            CellInfo ci = cellInfoList.get(i);
+
+            if (ci instanceof CellInfoCdma) {
+                CellInfoCdma cdmaCellInfo = (CellInfoCdma)ci;
+                CellSignalStrengthCdma cdmaSignalStrength = cdmaCellInfo.getCellSignalStrength();
+                return Integer.toString(cdmaSignalStrength.getDbm()) + "dBm";
+            }
+            else if (ci instanceof CellInfoLte) {
+                CellInfoLte lteCellInfo = (CellInfoLte)ci;
+                CellSignalStrengthLte lteSignalStrength = lteCellInfo.getCellSignalStrength();
+               return Integer.toString(lteSignalStrength.getDbm()) + "dBm";
+            }
+            else{
+                return "Error: bad cell info";
+            }
+        }
+
+        return "Error: no cell info";
     }
 
     protected void onResume() {
@@ -162,45 +203,33 @@ public class MainActivity extends Activity {
 
     View.OnClickListener saveButtonHandler = new View.OnClickListener() {
         public void onClick(View v) {
-            EditText idText = (EditText) findViewById(R.id.noteEditText);
+            TextView idTextView = (TextView) findViewById(R.id.noteEditText);
+            TextView timeTextView = (TextView) findViewById(R.id.timeTextView);
+            TextView signalStrengthTextView = (TextView) findViewById(R.id.signalStrengthTextView);
+            TextView connectionTypeTextView = (TextView) findViewById(R.id.connectionTypeTextView);
+            TextView downloadSpeedTextView = (TextView) findViewById(R.id.downloadSpeedTextView);
+            TextView uploadSpeedTextView = (TextView) findViewById(R.id.uploadSpeedTextView);
 
             DataCollectorDbHelper dbHelper = new DataCollectorDbHelper(getApplicationContext());
 
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
             ContentValues values = new ContentValues();
-            values.put(DataCollectorContract.DataEntry.COLUMN_NAME_ENTRY_ID, idText.getText().toString());
+            values.put(DataCollectorContract.DataEntry.COLUMN_NAME_ENTRY_ID, idTextView.getText().toString());
+            values.put(DataCollectorContract.DataEntry.COLUMN_NAME_TIME, timeTextView.getText().toString());
+            values.put(DataCollectorContract.DataEntry.COLUMN_NAME_SIGNAL_STRENGTH, signalStrengthTextView.getText().toString());
+            values.put(DataCollectorContract.DataEntry.COLUMN_NAME_CONNECTION_TYPE, connectionTypeTextView.getText().toString());
+            values.put(DataCollectorContract.DataEntry.COLUMN_NAME_DOWNLOAD_SPEED, downloadSpeedTextView.getText().toString());
+            values.put(DataCollectorContract.DataEntry.COLUMN_NAME_UPLOAD_SPEED, uploadSpeedTextView.getText().toString());
 
-            long newRowId;
-            newRowId = db.insert(
+            db.insert(
                     DataCollectorContract.DataEntry.TABLE_NAME,
                     "null",
                     values);
-
-            TelephonyManager telephonyManager = (TelephonyManager)getSystemService(getApplicationContext().TELEPHONY_SERVICE);
-            List<CellInfo> cellInfoList = telephonyManager.getAllCellInfo();
-
-            for (int i = 0; i < cellInfoList.size(); i++) {
-                CellInfo ci = cellInfoList.get(i);
-
-                if (ci instanceof CellInfoCdma) {
-                    CellInfoCdma cdmaCellInfo = (CellInfoCdma)ci;
-                    CellSignalStrengthCdma cdmaSignalStrength = cdmaCellInfo.getCellSignalStrength();
-                    System.out.println("RYAN CDMA: " + Integer.toString(cdmaSignalStrength.getDbm()));
-                }
-                else if (ci instanceof CellInfoLte) {
-                    CellInfoLte lteCellInfo = (CellInfoLte)ci;
-                    CellSignalStrengthLte lteSignalStrength = lteCellInfo.getCellSignalStrength();
-                    System.out.println("RYAN LTE: " + Integer.toString(lteSignalStrength.getDbm()));
-                }
-                else{
-                    System.out.println("RYAN: bad CellInfo!!!!");
-                }
-            }
         }
     };
 
-    View.OnClickListener readButtonHandler = new View.OnClickListener() {
+    View.OnClickListener exportButtonHandler = new View.OnClickListener() {
         public void onClick(View v) {
             DataCollectorDbHelper dbHelper = new DataCollectorDbHelper(getApplicationContext());
 
@@ -208,7 +237,12 @@ public class MainActivity extends Activity {
 
             String[] projection = {
                     DataCollectorContract.DataEntry._ID,
-                    DataCollectorContract.DataEntry.COLUMN_NAME_ENTRY_ID
+                    DataCollectorContract.DataEntry.COLUMN_NAME_ENTRY_ID,
+                    DataCollectorContract.DataEntry.COLUMN_NAME_TIME,
+                    DataCollectorContract.DataEntry.COLUMN_NAME_SIGNAL_STRENGTH,
+                    DataCollectorContract.DataEntry.COLUMN_NAME_CONNECTION_TYPE,
+                    DataCollectorContract.DataEntry.COLUMN_NAME_DOWNLOAD_SPEED,
+                    DataCollectorContract.DataEntry.COLUMN_NAME_UPLOAD_SPEED
             };
 
             String sortOrder = DataCollectorContract.DataEntry._ID + " ASC";
@@ -226,7 +260,7 @@ public class MainActivity extends Activity {
             c.moveToFirst();
 
             while (c.moveToNext()) {
-                Toast.makeText(getApplicationContext(), c.getString(c.getColumnIndexOrThrow(DataCollectorContract.DataEntry.COLUMN_NAME_ENTRY_ID)), Toast.LENGTH_LONG).show();
+                // write to csv file here
             }
         }
     };

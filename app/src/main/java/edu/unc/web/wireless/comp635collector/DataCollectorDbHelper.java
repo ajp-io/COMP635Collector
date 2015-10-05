@@ -7,18 +7,21 @@ import android.content.Context;
  * Created by rpdoy on 9/26/2015.
  */
 public class DataCollectorDbHelper extends SQLiteOpenHelper{
-    private static final String TEXT_TYPE = " TEXT";
-    private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + DataCollectorContract.DataEntry.TABLE_NAME + " (" +
                     DataCollectorContract.DataEntry._ID + " INTEGER PRIMARY KEY, " +
-                    DataCollectorContract.DataEntry.COLUMN_NAME_ENTRY_ID + " TEXT)";
+                    DataCollectorContract.DataEntry.COLUMN_NAME_ENTRY_ID + " TEXT," +
+                    DataCollectorContract.DataEntry.COLUMN_NAME_TIME + " TEXT," +
+                    DataCollectorContract.DataEntry.COLUMN_NAME_SIGNAL_STRENGTH + " TEXT," +
+                    DataCollectorContract.DataEntry.COLUMN_NAME_CONNECTION_TYPE + " TEXT," +
+                    DataCollectorContract.DataEntry.COLUMN_NAME_DOWNLOAD_SPEED + " TEXT," +
+                    DataCollectorContract.DataEntry.COLUMN_NAME_UPLOAD_SPEED + " TEXT)";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + DataCollectorContract.DataEntry.TABLE_NAME;
 
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "DataCollector.db";
 
     public DataCollectorDbHelper(Context context) {
