@@ -69,8 +69,16 @@ public class MainActivity extends Activity {
         ((TextView) findViewById(R.id.timeTextView)).setText(getTime());
         ((TextView) findViewById(R.id.connectionTypeTextView)).setText(getNetworkClass(getApplicationContext()));
         ((TextView) findViewById(R.id.signalStrengthTextView)).setText(getSignalStrength());
-
-        /*try {
+/*
+        try {
+            getDownloadSpeed();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    */
+        try {
             getUploadSpeed();
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -78,13 +86,6 @@ public class MainActivity extends Activity {
             e.printStackTrace();
         }
 
-        try {
-            getDownloadSpeed();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
     }
 
     private String getTime() {
@@ -169,7 +170,7 @@ public class MainActivity extends Activity {
 
     public void getUploadSpeed() throws ExecutionException, InterruptedException {
         File sdCard = Environment.getExternalStorageDirectory();
-        File uploadFile = new File(sdCard, "On_Guard.pdf");
+        File uploadFile = new File(sdCard, "VMware.exe");
         UploadToDropbox upload = new UploadToDropbox(this, mDBApi, "/", uploadFile);
         upload.execute();
     }

@@ -44,7 +44,7 @@ public class UploadToDropbox extends AsyncTask<Void, Long, Boolean> {
 
 
     public UploadToDropbox(Context context, DropboxAPI<?> api, String dropboxPath, File file) {
-        mContext = context.getApplicationContext();
+        mContext = context;
         mActivity = (Activity) mContext;
 
         mFileLen = file.length();
@@ -157,7 +157,7 @@ public class UploadToDropbox extends AsyncTask<Void, Long, Boolean> {
             double txDiff = TotalTxAfterTest - TotalTxBeforeTest;
 
             double uploadSpeed = (txDiff / (TimeDifference/1000) / 1000000 * 8);
-            ((TextView) mActivity.findViewById(R.id.downloadSpeedTextView)).setText((Double.toString(uploadSpeed)));
+            ((TextView) mActivity.findViewById(R.id.uploadSpeedTextView)).setText((Double.toString(uploadSpeed)));
             showToast("Successfully uploaded");
         } else {
             showToast(mErrorMsg);
