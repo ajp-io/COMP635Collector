@@ -92,6 +92,7 @@ public class DownloadFromDropbox extends AsyncTask<Void, Long, Boolean> {
     @Override
     protected void onPostExecute(Boolean result) {
         mDialog.dismiss();
+
         if (result) {
             long TotalRxAfterTest = TrafficStats.getTotalRxBytes();
             long AfterTime = System.currentTimeMillis();

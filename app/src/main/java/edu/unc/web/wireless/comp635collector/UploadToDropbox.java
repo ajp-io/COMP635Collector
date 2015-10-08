@@ -149,6 +149,7 @@ public class UploadToDropbox extends AsyncTask<Void, Long, Boolean> {
     @Override
     protected void onPostExecute(Boolean result) {
         mDialog.dismiss();
+        
         if (result) {
             long TotalTxAfterTest = TrafficStats.getTotalTxBytes();
             long AfterTime = System.currentTimeMillis();
