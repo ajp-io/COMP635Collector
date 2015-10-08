@@ -171,10 +171,8 @@ public class MainActivity extends Activity {
     }
 
     public void getSpeeds() {
-        File sdCard = Environment.getExternalStorageDirectory();
-        File uploadFile = new File(sdCard, "VMware.exe");
-        UploadToDropbox upload = new UploadToDropbox(this, mDBApi, "/", uploadFile);
-        upload.execute();
+        DownloadFromDropbox downloadFile = new DownloadFromDropbox(this, mDBApi, "/VMware.exe", Environment.getExternalStorageDirectory().getPath() + "/VMware.exe");
+        downloadFile.execute();
     }
 
     public void getUploadSpeed() throws ExecutionException, InterruptedException {

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.TrafficStats;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -102,6 +103,11 @@ public class DownloadFromDropbox extends AsyncTask<Void, Long, Boolean> {
 
             ((TextView) mActivity.findViewById(R.id.downloadSpeedTextView)).setText(String.format("%1$,.2f", downloadSpeed));
             showToast("Successfully downloaded");
+
+            File sdCard = Environment.getExternalStorageDirectory();
+            File uploadFile = new File(sdCard, "VMware.exe");
+            UploadToDropbox upload = new UploadToDropbox(mContext, mApi, "/", uploadFile);
+            upload.execute();
         } else {
             showToast(mErrorMsg);
         }

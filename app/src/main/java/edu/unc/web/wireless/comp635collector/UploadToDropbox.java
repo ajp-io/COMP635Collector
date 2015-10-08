@@ -164,10 +164,6 @@ public class UploadToDropbox extends AsyncTask<Void, Long, Boolean> {
         } else {
             showToast(mErrorMsg);
         }
-
-        DownloadFromDropbox downloadFile = new DownloadFromDropbox(mContext, mApi, "/VMware.exe",
-                Environment.getExternalStorageDirectory().getPath() + "/VMware.exe");
-        downloadFile.execute();
     }
 
     private void showToast(String msg) {
