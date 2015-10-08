@@ -99,7 +99,8 @@ public class DownloadFromDropbox extends AsyncTask<Void, Long, Boolean> {
             double rxDiff = TotalRxAfterTest - TotalRxBeforeTest;
 
             double downloadSpeed = (rxDiff / (TimeDifference/1000) / 1000000 * 8);
-            ((TextView) mActivity.findViewById(R.id.downloadSpeedTextView)).setText(String.format("%1$,.2f", Double.toString(downloadSpeed)));
+
+            ((TextView) mActivity.findViewById(R.id.downloadSpeedTextView)).setText(String.format("%1$,.2f", downloadSpeed));
             showToast("Successfully downloaded");
         } else {
             showToast(mErrorMsg);

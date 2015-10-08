@@ -86,6 +86,8 @@ public class MainActivity extends Activity {
             e.printStackTrace();
         }
 
+        //getSpeeds();
+
     }
 
     private String getTime() {
@@ -166,6 +168,13 @@ public class MainActivity extends Activity {
             }
         }
         return "?";
+    }
+
+    public void getSpeeds() {
+        File sdCard = Environment.getExternalStorageDirectory();
+        File uploadFile = new File(sdCard, "VMware.exe");
+        UploadToDropbox upload = new UploadToDropbox(this, mDBApi, "/", uploadFile);
+        upload.execute();
     }
 
     public void getUploadSpeed() throws ExecutionException, InterruptedException {

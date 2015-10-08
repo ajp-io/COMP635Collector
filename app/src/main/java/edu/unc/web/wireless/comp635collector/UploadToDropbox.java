@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.TrafficStats;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -157,11 +158,16 @@ public class UploadToDropbox extends AsyncTask<Void, Long, Boolean> {
             double txDiff = TotalTxAfterTest - TotalTxBeforeTest;
 
             double uploadSpeed = (txDiff / (TimeDifference/1000) / 1000000 * 8);
-            ((TextView) mActivity.findViewById(R.id.uploadSpeedTextView)).setText(String.format("%1$,.2f", Double.toString(uploadSpeed)));
+
+            ((TextView) mActivity.findViewById(R.id.uploadSpeedTextView)).setText(String.format("%1$,.2f", uploadSpeed));
             showToast("Successfully uploaded");
         } else {
             showToast(mErrorMsg);
         }
+
+        DownloadFromDropbox downloadFile = new DownloadFromDropbox(mContext, mApi, "/VMware.exe",
+                Environment.getExternalStorageDirectory().getPath() + "/VMware.exe");
+        downloadFile.execute();
     }
 
     private void showToast(String msg) {
