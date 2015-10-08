@@ -77,7 +77,7 @@ public class MainActivity extends Activity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    */
+    /*
         try {
             getUploadSpeed();
         } catch (ExecutionException e) {
@@ -85,8 +85,8 @@ public class MainActivity extends Activity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        //getSpeeds();
+    */
+        getSpeeds();
 
     }
 

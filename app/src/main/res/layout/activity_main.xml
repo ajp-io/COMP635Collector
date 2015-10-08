@@ -152,6 +152,7 @@
         android:text="Medium Text"
         android:id="@+id/connectionTypeTextView"
         android:layout_alignTop="@+id/connectionLabel"
+        android:layout_alignEnd="@+id/noteEditText"
         android:layout_toEndOf="@+id/downloadSpeedTextView" />
 
 </RelativeLayout>
