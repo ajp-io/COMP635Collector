@@ -106,7 +106,7 @@ public class DownloadFromDropbox extends AsyncTask<Void, Long, Boolean> {
             showToast("Successfully downloaded");
 
             File sdCard = Environment.getExternalStorageDirectory();
-            File uploadFile = new File(sdCard, "VMware.exe");
+            File uploadFile = new File(sdCard, "test.mp3");
             UploadToDropbox upload = new UploadToDropbox(mContext, mApi, "/", uploadFile);
             upload.execute();
         } else {

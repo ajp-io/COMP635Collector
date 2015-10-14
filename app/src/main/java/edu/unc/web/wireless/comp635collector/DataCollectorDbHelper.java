@@ -15,13 +15,14 @@ public class DataCollectorDbHelper extends SQLiteOpenHelper{
                     DataCollectorContract.DataEntry.COLUMN_NAME_SIGNAL_STRENGTH + " TEXT," +
                     DataCollectorContract.DataEntry.COLUMN_NAME_CONNECTION_TYPE + " TEXT," +
                     DataCollectorContract.DataEntry.COLUMN_NAME_DOWNLOAD_SPEED + " TEXT," +
-                    DataCollectorContract.DataEntry.COLUMN_NAME_UPLOAD_SPEED + " TEXT)";
+                    DataCollectorContract.DataEntry.COLUMN_NAME_UPLOAD_SPEED + " TEXT," +
+                    DataCollectorContract.DataEntry.COLUMN_NAME_NOTE + " TEXT)";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + DataCollectorContract.DataEntry.TABLE_NAME;
 
 
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "DataCollector.db";
 
     public DataCollectorDbHelper(Context context) {

@@ -16,5 +16,6 @@ public class DataCollectorContract {
         public static final String COLUMN_NAME_CONNECTION_TYPE = "connectionType";
         public static final String COLUMN_NAME_DOWNLOAD_SPEED = "downloadSpeed";
         public static final String COLUMN_NAME_UPLOAD_SPEED = "uploadSpeed";
+        public static final String COLUMN_NAME_NOTE = "note";
     }
 }
